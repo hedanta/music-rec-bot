@@ -1,0 +1,41 @@
+# ----- Secrets / env -----
+.env
+.env.*
+!.env.in
+
+# ----- Python cache -----
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ----- Virtual environments -----
+.venv/
+venv/
+ENV/
+env/
+
+# ----- Build / packaging -----
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ----- Test / coverage -----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ----- Type checkers / linters -----
+.mypy_cache/
+.ruff_cache/
+.pyright/
+.pylint.d/
+
+# ----- IDE / editors -----
+.vscode/
+.idea/
+*.iml

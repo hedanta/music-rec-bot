@@ -1,0 +1,51 @@
+start: |
+  Привет! Я бот для рекомендаций музыки.
+
+  Команды:
+  /rate — оценить трек
+  /getrecommendation — получить рекомендацию
+  /myrecommendations — мои рекомендации
+  /whoami — кто я
+  /help — помощь
+
+help: |
+  Доступные команды:
+  /rate <artist> - <title> <1..5>
+  Пример: /rate Radiohead - Creep 5
+
+  /getrecommendation
+  /myrecommendations
+  /whoami
+
+whoami: |
+  Ты: {full_name}
+  username: @{username}
+  id: {user_id}
+
+rate_usage: |
+  Использование:
+  /rate <artist> - <title>
+  Пример: /rate Radiohead - Creep
+
+rate_choose: |
+  Оцени трек кнопками:
+  {artist} — {title}
+
+rate_result: |
+  Готово: {artist} — {title}
+  Твоя оценка: {value}
+
+rate_value_like: "лайк"
+rate_value_dislike: "дизлайк"
+rate_value_neutral: "нейтрально"
+
+getrecommendation_stub: |
+  Пока это заглушка.
+  Позже здесь будет реальная рекомендация.
+
+myrecommendations_stub: |
+  Пока это заглушка.
+  Позже здесь будет список твоих рекомендаций.
+
+error_generic: |
+  Что-то пошло не так. Попробуй ещё раз.
