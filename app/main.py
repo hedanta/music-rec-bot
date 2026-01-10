@@ -1,58 +1,44 @@
+import asyncio
 import logging
+import os
 
-from telegram.ext import Application
-from telegram.ext import CommandHandler
-from telegram.ext import CallbackQueryHandler
+from aiogram import Bot, Dispatcher, html
+from aiogram.enums import ParseMode
+from aiogram.client.default import DefaultBotProperties
 
+from app.texts import Texts
+from app.middlewares.texts import TextsMiddleware
 from app.config import load_config
-from app.texts import load_texts
 
-from app.handlers.start_help import start_handler, help_handler
-from app.handlers.whoami import whoami_handler
-from app.handlers.rate import rate_handler, rate_callback_handler
-from app.handlers.recommendations import (
-    getrecommendation_handler,
-    myrecommendations_handler,
-)
+from app.handlers.start import router as start_router
+from app.handlers.help import router as help_router
+from app.handlers.setup_recommendations import router as setup_router
+from app.handlers.get_rec import router as get_rec_router
 
 
-def build_application() -> Application:
+async def main() -> None:
+    logging.basicConfig(level=logging.INFO)
+
     config = load_config()
-    texts = load_texts(config.bot_lang)
 
-    application = Application.builder().token(config.bot_token).build()
-
-    application.bot_data["texts"] = texts
-
-    application.add_handler(CommandHandler("start", start_handler))
-    application.add_handler(CommandHandler("help", help_handler))
-    application.add_handler(CommandHandler("whoami", whoami_handler))
-
-    application.add_handler(CommandHandler("rate", rate_handler))
-    application.add_handler(CommandHandler("rate", rate_handler))
-    application.add_handler(
-        CallbackQueryHandler(rate_callback_handler, pattern="^rate:")
+    bot = Bot(
+        token=config.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
+    dp = Dispatcher()
 
-    application.add_handler(
-        CommandHandler("getrecommendation", getrecommendation_handler)
-    )
-    application.add_handler(
-        CommandHandler("myrecommendations", myrecommendations_handler)
-    )
+    texts = Texts("texts/ru.yml")
 
-    return application
+    # middleware: прокидываем texts в каждый хендлер параметром texts: Texts
+    dp.update.middleware(TextsMiddleware(texts))
+    dp.callback_query.middleware(TextsMiddleware(texts))
 
+    dp.include_router(start_router)
+    dp.include_router(help_router)
+    dp.include_router(setup_router)
+    dp.include_router(get_rec_router)
 
-def main() -> None:
-    logging.basicConfig(
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-        level=logging.INFO,
-    )
-
-    application = build_application()
-    application.run_polling(allowed_updates=None)
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
