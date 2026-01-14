@@ -39,3 +39,6 @@ htmlcov/
 .vscode/
 .idea/
 *.iml
+
+.history
+*.db

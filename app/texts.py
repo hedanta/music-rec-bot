@@ -22,3 +22,8 @@ class Texts:
         if isinstance(value, str):
             return value.format(**kwargs)
         return str(value)
+
+    def get_dict(self, key: str):
+        value = self._data.get(key)
+        if isinstance(value, dict):
+            return value

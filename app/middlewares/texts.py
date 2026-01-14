@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 from typing import Any, Awaitable, Callable, Dict
-
 from aiogram import BaseMiddleware
 
 from app.texts import Texts

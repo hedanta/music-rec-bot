@@ -1,30 +1,35 @@
 import asyncio
 import logging
-import os
 
-from aiogram import Bot, Dispatcher, html
+from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
 from app.texts import Texts
 from app.middlewares.texts import TextsMiddleware
-from app.config import load_config
+from app.config import CONFIG
 
 from app.handlers.start import router as start_router
 from app.handlers.help import router as help_router
-from app.handlers.setup_recommendations import router as setup_router
+from app.handlers.setup_recs import router as setup_router
 from app.handlers.get_rec import router as get_rec_router
+from app.handlers.history import router as history_router
+
+from app.storage.db import init_db
+from app.services import init_recommender
 
 
 async def main() -> None:
     logging.basicConfig(level=logging.INFO)
 
-    config = load_config()
-
     bot = Bot(
-        token=config.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+        token=CONFIG.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML)
     )
     dp = Dispatcher()
+
+    await init_db()
+
+    init_recommender()
 
     texts = Texts("texts/ru.yml")
 
@@ -34,6 +39,7 @@ async def main() -> None:
 
     dp.include_router(start_router)
     dp.include_router(help_router)
+    dp.include_router(history_router)
     dp.include_router(setup_router)
     dp.include_router(get_rec_router)
 
