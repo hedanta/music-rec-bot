@@ -1,6 +1,8 @@
 # music-rec-bot
 
 ## Инструкция по запуску
+Необходимо скачать данные по [ссылке](https://drive.google.com/drive/folders/1YBCtdfMsw-cFEqxHx00ifIpCw6WLUd0f?usp=drive_link),
+поместить csv файлы в папку (например, data) в корне проекта и указать её в `.env` в качестве `DATA_DIR`.
 
 ```
 python -m venv .venv
