@@ -1,13 +1,23 @@
 import pandas as pd
 import sqlite3
 import logging
+from dotenv import load_dotenv
+import os
 from pathlib import Path
 
-from app.config import CONFIG
 
-df = pd.read_csv(CONFIG.users_csv)
+logging.basicConfig(level=logging.INFO)
 
-conn = sqlite3.connect(CONFIG.db_path)
+load_dotenv()
+
+data_dir = Path(os.getenv("DATA_DIR", "data"))
+users_csv = data_dir / "user_listening_history.csv"
+db_path = data_dir / "recs.db"
+
+df = pd.read_csv(users_csv)
+
+conn = sqlite3.connect(db_path)
+
 
 conn.executescript(
     """
@@ -19,6 +29,8 @@ CREATE TABLE IF NOT EXISTS user_listening (
 );
 """
 )
+
+logging.info("Migration started")
 
 df.to_sql(
     "user_listening",
@@ -32,4 +44,4 @@ df.to_sql(
 conn.commit()
 conn.close()
 
-logging.info("Migration done.")
+logging.info("Migration finished")

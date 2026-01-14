@@ -14,7 +14,7 @@ cp .env.example .env
 # вставить токен в .env
 ```
 ```
-python tools/db.py
+python tools/csv_to_db.py
 ```
 ```
 python -m app.main
