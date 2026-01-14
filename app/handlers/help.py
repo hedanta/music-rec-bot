@@ -8,5 +8,8 @@ router = Router()
 
 
 @router.message(Command("help"))
-async def help_handler(message: Message, texts: Texts) -> None:
+async def help_handler(message: Message, texts: Texts):
+    """
+    Показывает справку по боту
+    """
     await message.answer(texts.get("help"))

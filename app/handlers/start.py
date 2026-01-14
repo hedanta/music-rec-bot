@@ -8,5 +8,8 @@ router = Router()
 
 
 @router.message(CommandStart())
-async def start_handler(message: Message, texts: Texts) -> None:
+async def start_handler(message: Message, texts: Texts):
+    """
+    Отправляет стартовое сообщение
+    """
     await message.answer(texts.get("start"))
